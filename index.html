@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>D5配电施工安规题库</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f6f8;color:#333;font-size:16px;line-height:1.6}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:#fff;position:relative}
+.header{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#1890ff 0%,#096dd9 100%);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(24,144,255,.2)}
+.header-title{font-size:17px;font-weight:600}
+.header-stats{font-size:13px;opacity:.9}
+.progress-bar{height:3px;background:#e6f7ff;position:relative}
+.progress-fill{height:100%;background:#52c41a;transition:width .3s ease}
+.page{display:none;padding:16px;padding-bottom:80px}
+.page.active{display:block}
+.home-page{padding:30px 20px}
+.home-title{text-align:center;font-size:22px;font-weight:700;color:#1890ff;margin-bottom:8px}
+.home-subtitle{text-align:center;color:#888;font-size:14px;margin-bottom:30px}
+.menu-card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);cursor:pointer;display:flex;align-items:center;transition:transform .2s}
+.menu-card:active{transform:scale(.98)}
+.menu-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-right:16px;flex-shrink:0}
+.menu-icon.blue{background:#e6f7ff;color:#1890ff}
+.menu-icon.green{background:#f6ffed;color:#52c41a}
+.menu-icon.orange{background:#fff7e6;color:#fa8c16}
+.menu-icon.red{background:#fff1f0;color:#f5222d}
+.menu-content{flex:1}
+.menu-title{font-size:16px;font-weight:600;margin-bottom:4px}
+.menu-desc{font-size:13px;color:#999}
+.question-card{background:#fff;border-radius:12px;padding:16px;margin-bottom:16px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.question-type{display:inline-block;padding:3px 10px;border-radius:4px;font-size:12px;margin-bottom:10px;font-weight:500}
+.type-single{background:#e6f7ff;color:#1890ff}
+.type-multi{background:#fff7e6;color:#fa8c16}
+.type-judge{background:#f6ffed;color:#52c41a}
+.question-number{color:#1890ff;font-weight:600;margin-right:6px}
+.question-text{font-size:16px;line-height:1.7;margin-bottom:16px;color:#222}
+.options{display:flex;flex-direction:column;gap:10px}
+.option{padding:14px 16px;border:1.5px solid #e8e8e8;border-radius:10px;cursor:pointer;display:flex;align-items:flex-start;transition:all .2s;background:#fafafa}
+.option:hover{border-color:#1890ff}
+.option.disabled{pointer-events:none}
+.option.correct{border-color:#52c41a;background:#f6ffed;color:#389e0d}
+.option.wrong{border-color:#f5222d;background:#fff1f0;color:#cf1322}
+.option.selected-multi{border-color:#1890ff;background:#e6f7ff}
+.option-letter{width:26px;height:26px;border-radius:50%;background:#fff;border:1.5px solid #d9d9d9;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;margin-right:12px;flex-shrink:0;color:#666}
+.option.correct .option-letter{background:#52c41a;border-color:#52c41a;color:#fff}
+.option.wrong .option-letter{background:#f5222d;border-color:#f5222d;color:#fff}
+.option-text{flex:1;padding-top:2px}
+.answer-result{margin-top:16px;padding:12px 14px;border-radius:8px;font-size:14px;display:none}
+.answer-result.show{display:block}
+.answer-result.correct{background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f}
+.answer-result.wrong{background:#fff1f0;color:#cf1322;border:1px solid #ffa39e}
+.answer-result strong{display:block;margin-bottom:4px}
+.bottom-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid #f0f0f0;padding:10px 16px;display:flex;gap:10px;z-index:100}
+.btn{flex:1;padding:12px;border:none;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;transition:all .2s}
+.btn:active{opacity:.8}
+.btn-primary{background:linear-gradient(135deg,#1890ff,#096dd9);color:#fff}
+.btn-outline{background:#fff;color:#1890ff;border:1px solid #1890ff}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.answer-card{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-top:12px}
+.card-item{aspect-ratio:1;display:flex;align-items:center;justify-content:center;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;background:#f5f5f5;color:#666;border:1px solid #e8e8e8}
+.card-item.correct{background:#f6ffed;color:#52c41a;border-color:#b7eb8f}
+.card-item.wrong{background:#fff1f0;color:#f5222d;border-color:#ffa39e}
+.card-item.current{box-shadow:0 0 0 2px #1890ff}
+.card-legend{display:flex;gap:16px;margin-top:16px;font-size:12px;color:#888;justify-content:center;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:5px}
+.legend-dot{width:14px;height:14px;border-radius:3px}
+.result-page{text-align:center;padding:40px 20px}
+.result-score{font-size:64px;font-weight:700;color:#1890ff;margin:20px 0}
+.result-info{display:flex;justify-content:space-around;margin:30px 0;padding:20px;background:#fafafa;border-radius:12px}
+.result-item{text-align:center}
+.result-item-value{font-size:24px;font-weight:600;color:#333}
+.result-item-label{font-size:13px;color:#888;margin-top:4px}
+.result-item-value.green{color:#52c41a}
+.result-item-value.red{color:#f5222d}
+.wrong-item{background:#fff;border-radius:10px;padding:14px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.04);cursor:pointer;border-left:4px solid #f5222d}
+.wrong-question{font-size:14px;color:#333;line-height:1.6;margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.wrong-meta{font-size:12px;color:#999}
+.empty-state{text-align:center;padding:60px 20px;color:#bbb}
+.empty-icon{font-size:48px;margin-bottom:12px}
+.back-btn{background:none;border:none;color:#fff;font-size:20px;cursor:pointer;padding:0 8px;margin-right:8px}
+.header-left{display:flex;align-items:center}
+.filter-tabs{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px}
+.filter-tab{padding:8px 16px;border-radius:20px;background:#f5f5f5;font-size:13px;white-space:nowrap;cursor:pointer;border:none;color:#666}
+.filter-tab.active{background:#1890ff;color:#fff}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="header">
+<div class="header-left">
+<button class="back-btn" onclick="goBack()" id="backBtn" style="display:none;">←</button>
+<div class="header-title" id="headerTitle">D5配电施工安规题库</div>
+</div>
+<div class="header-stats" id="headerStats"></div>
+</div>
+<div class="progress-bar" id="progressBar" style="display:none;">
+<div class="progress-fill" id="progressFill" style="width:0%"></div>
+</div>
+
+<!-- 首页 -->
+<div class="page home-page active" id="homePage">
+<div class="home-title">⚡ 配电施工安规题库</div>
+<div class="home-subtitle">共150道题 · 单选/多选/判断</div>
+<div class="menu-card" onclick="startPractice()">
+<div class="menu-icon blue">📝</div>
+<div class="menu-content">
+<div class="menu-title">顺序刷题</div>
+<div class="menu-desc">按题号顺序练习全部150道题</div>
+</div>
+</div>
+<div class="menu-card" onclick="startRandom()">
+<div class="menu-icon green">🎲</div>
+<div class="menu-content">
+<div class="menu-title">随机刷题</div>
+<div class="menu-desc">随机打乱题目顺序练习</div>
+</div>
+</div>
+<div class="menu-card" onclick="showWrongBook()">
+<div class="menu-icon red">📕</div>
+<div class="menu-content">
+<div class="menu-title">错题本</div>
+<div class="menu-desc">收录做错的题目，针对性复习 <span id="wrongCountBadge"></span></div>
+</div>
+</div>
+<div class="menu-card" onclick="showAnswerCard()">
+<div class="menu-icon orange">📋</div>
+<div class="menu-content">
+<div class="menu-title">答题卡</div>
+<div class="menu-desc">查看答题进度和完成情况</div>
+</div>
+</div>
+</div>
+
+<!-- 刷题页面 -->
+<div class="page" id="quizPage">
+<div class="question-card">
+<div><span class="question-type" id="questionType">单选题</span></div>
+<div class="question-text">
+<span class="question-number" id="questionNum">1/150</span>
+<span id="questionText"></span>
+</div>
+<div class="options" id="optionsContainer"></div>
+<div class="answer-result" id="answerResult"></div>
+</div>
+</div>
+
+<!-- 答题卡页面 -->
+<div class="page" id="cardPage">
+<div class="question-card">
+<div style="font-weight:600;margin-bottom:12px;">答题进度</div>
+<div style="font-size:14px;color:#666;margin-bottom:8px;">
+已答：<span id="cardAnswered">0</span> / 150
+&nbsp;&nbsp; 正确：<span style="color:#52c41a;" id="cardCorrect">0</span>
+&nbsp;&nbsp; 错误：<span style="color:#f5222d;" id="cardWrong">0</span>
+</div>
+<div class="answer-card" id="answerCardGrid"></div>
+<div class="card-legend">
+<div class="legend-item"><div class="legend-dot" style="background:#f5f5f5;"></div>未答</div>
+<div class="legend-item"><div class="legend-dot" style="background:#f6ffed;border:1px solid #b7eb8f;"></div>正确</div>
+<div class="legend-item"><div class="legend-dot" style="background:#fff1f0;border:1px solid #ffa39e;"></div>错误</div>
+</div>
+</div>
+<div style="margin-top:16px;">
+<button class="btn btn-primary" onclick="continueQuiz()">继续答题</button>
+</div>
+</div>
+
+<!-- 错题本页面 -->
+<div class="page" id="wrongPage">
+<div class="filter-tabs">
+<button class="filter-tab active" onclick="filterWrong('all')">全部</button>
+<button class="filter-tab" onclick="filterWrong('single')">单选题</button>
+<button class="filter-tab" onclick="filterWrong('multi')">多选题</button>
+<button class="filter-tab" onclick="filterWrong('judge')">判断题</button>
+</div>
+<div id="wrongList"></div>
+</div>
+
+<!-- 结果页 -->
+<div class="page result-page" id="resultPage">
+<div style="font-size:18px;color:#666;">本次练习得分</div>
+<div class="result-score" id="finalScore">0</div>
+<div class="result-info">
+<div class="result-item"><div class="result-item-value" id="resultTotal">0</div><div class="result-item-label">总题数</div></div>
+<div class="result-item"><div class="result-item-value green" id="resultCorrect">0</div><div class="result-item-label">答对</div></div>
+<div class="result-item"><div class="result-item-value red" id="resultWrong">0</div><div class="result-item-label">答错</div></div>
+<div class="result-item"><div class="result-item-value" id="resultRate">0%</div><div class="result-item-label">正确率</div></div>
+</div>
+<button class="btn btn-primary" onclick="backToHome()" style="margin-top:20px;">返回首页</button>
+</div>
+
+<!-- 底部操作栏 -->
+<div class="bottom-bar" id="bottomBar" style="display:none;">
+<button class="btn btn-outline" onclick="showAnswerCard()">答题卡</button>
+<button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>下一题</button>
+</div>
+</div>
+
+<script>
+// 题库数据
+const Q = [
+{id:1,t:"single",q:"依据配电安规，参与公司系统电气工作的外单位或外来人员，参加工作前应经考试合格，并经（ ）认可。",o:["调度控制中心","设备运维管理单位","施工单位","安全监察部门"],a:"B"},
+{id:2,t:"single",q:"依据配电安规，在超过（    ）m深的基坑内作业时，向坑外抛掷土石应防止土石回落坑内，并做好防止土层塌方的临边防护措施。",o:["1","1.5","2","2.5"],a:"B"},
+{id:3,t:"single",q:"依据配电安规，不应站在（    ）传递土石或放置传土工具。不应由下部掏挖土层。",o:["挡板上","撑木上","挡板、撑木上","脚手架上"],a:"C"},
+{id:4,t:"single",q:"依据配电安规，因故间断电气工作连续（ ）及以上者，恢复工作前应重新学习本文件，并经考试合格。",o:["一个月","两个月","三个月","六个月"],a:"C"},
+{id:5,t:"single",q:"依据配电安规，在居民区及交通道路附近开挖的基坑，应设坑盖或可靠遮栏，加挂警告标示牌，夜间挂（    ）。",o:["黄灯","绿灯","红灯","红外灯"],a:"C"},
+{id:6,t:"single",q:"依据配电安规，现场作业人员进入作业现场应正确佩戴安全帽，还应穿（ ）。",o:["化纤长袖工作服、绝缘鞋","全棉长袖工作服、绝缘鞋","全棉短袖工作服、绝缘鞋","化纤短袖工作服、绝缘鞋"],a:"B"},
+{id:7,t:"single",q:"依据配电安规，登杆塔前，应核对（    ）。",o:["杆号","线路名称和杆号","杆基","线路名称"],a:"B"},
+{id:8,t:"single",q:"依据配电安规，遇有冲刷、起土、上拔或导地线、拉线松动的杆塔，登杆塔前，应先（    ）、打好临时拉线或支好架杆。",o:["培土加固","三交待","两穿一戴","测量接地电阻"],a:"A"},
+{id:9,t:"single",q:"依据配电安规，攀登杆塔过程中应检查（    ）和金具锈蚀情况。",o:["纵向裂纹","横向裂纹","裂纹","绝缘子污染"],a:"B"},
+{id:10,t:"single",q:"依据配电安规，作业人员攀登杆塔、杆塔上移位及杆塔上作业时，手扶的构件应（    ）。",o:["牢固","方便","灵活","耐用"],a:"A"},
+{id:11,t:"single",q:"依据配电安规，在人员密集或有人员通过的地段进行杆塔上作业时，（    ）下方应按坠落半径设围栏或其他保护措施。",o:["杆塔","杆上人员","作业点","横担"],a:"C"},
+{id:12,t:"single",q:"依据配电安规，杆塔上下无法避免垂直交叉作业时，应做好（    ）的措施，作业时要相互照应，密切配合。",o:["防物体打击","防落物伤人","防机械伤害","防触电"],a:"B"},
+{id:13,t:"single",q:"依据配电安规，立、撤杆应设专人统一指挥。开工前，应交待施工方法、指挥信号和（    ）。",o:["安全措施","技术措施","组织措施","应急措施"],a:"A"},
+{id:14,t:"single",q:"依据配电安规，立、撤杆塔时，基坑内不应有人。除指挥人及指定人员外，其他人员应在杆塔高度的（    ）倍距离以外。",o:["1.1","1.2","1.3","1.4"],a:"B"},
+{id:15,t:"single",q:"依据配电安规，使用临时拉线时，一个锚桩上的临时拉线不应超过（    ）。",o:["一根","两根","三根","四根"],a:"B"},
+{id:16,t:"single",q:"依据配电安规，利用已有杆塔立、撤杆，应检查杆塔（    ）及拉线和杆塔的强度，必要时应增设临时拉线或采取其他补强措施。",o:["基础","根部","中部","上部"],a:"B"},
+{id:17,t:"single",q:"依据配电安规，使用倒落式抱杆立、撤杆，主牵引绳、尾绳、杆塔中心及抱杆顶应在一条直线上，抱杆下端部应固定牢固，抱杆顶部应设临时拉线，并由（    ）均匀调节控制。",o:["专责监护人","技术人员","工作负责人","有经验的人员"],a:"D"},
+{id:18,t:"single",q:"依据配电安规，在交叉跨越各种线路、铁路、公路、河流等地方放线、撤线，应先取得有关（    ）同意，做好跨越架搭设、封航、封路、在路口设专人持信号旗看守等安全措施。",o:["主管部门","下属部门","经信部门","交通部门"],a:"A"},
+{id:19,t:"single",q:"依据配电安规，拆除杆上导线前，应检查（    ），做好防止倒杆措施。",o:["卡盘","拉线","埋深","杆根"],a:"D"},
+{id:20,t:"single",q:"依据配电安规，放线、紧线时，遇接线头过滑轮、横担、树枝、房屋等处有卡、挂现象，应松线后处理。处理时操作人员应站在卡线处（    ）。",o:["内侧","外侧","下方","上方"],a:"B"},
+{id:21,t:"single",q:"依据配电安规，（    ）采用突然剪断导线的做法撤线。",o:["宜","可以","不应","在保障安全前提下可"],a:"C"},
+{id:22,t:"single",q:"依据配电安规，架空绝缘导线不应视为（    ）。",o:["绝缘设备","导电设备","承力设备","载流设备"],a:"A"},
+{id:23,t:"single",q:"依据配电安规，在10kV带电杆塔上进行测量、防腐、巡视检查、紧杆塔螺栓、清除杆塔上异物等工作，作业人员活动范围及其所携带的工具、材料等与带电导线最小距离不应小于（    ）m。",o:["0.7","1","1.5","3"],a:"A"},
+{id:24,t:"single",q:"依据配电安规，在带电杆塔上工作中，应使用（    ）绳索，风力不应超过5级，并设人监护。",o:["铁","绝缘无极","棉纱","钢丝"],a:"B"},
+{id:25,t:"single",q:"依据配电安规，邻近10kV带电线路工作时，人体、导线、施工机具等与带电线路的距离应满足（    ）m。",o:["1","0.7","0.4","0.9"],a:"A"},
+{id:26,t:"single",q:"依据配电安规，同杆（塔）架设多回线路中部分线路停电的工作，工作票中应填写多回线路中每回线路的（    ）。",o:["双重称号","双重名称","位置","线路属地"],a:"A"},
+{id:27,t:"single",q:"依据配电安规，在带电导线附近使用绑线时，应在下面绕成小盘再带上杆塔。不应在杆塔上（    ）。",o:["卷绕或放开绑线","卷绕绑线","放开绑线","使用绑线"],a:"A"},
+{id:28,t:"single",q:"依据配电安规，在配电站或高压室内搬动梯子、管子等长物，应（   ），并与带电部分保持足够的安全距离。",o:["放倒，由一人搬运","直立，由一人搬运","放倒，由两人搬运","直立，由两人搬运"],a:"C"},
+{id:29,t:"single",q:"依据配电安规，电缆井、电缆隧道内工作时，通风设备应（    ）。",o:["时刻准备","随时开启","保持常开","间歇性开启"],a:"C"},
+{id:30,t:"single",q:"依据配电安规，电缆井、电缆隧道内作业过程中应用气体检测仪检查井内或隧道内的（    ）是否超标，并做好记录。",o:["易燃易爆及有毒气体的含量","易燃易爆气体的含量","有毒气体的含量","一氧化碳含量"],a:"A"},
+{id:31,t:"single",q:"依据配电安规，掘路施工应做好防止交通事故的安全措施。施工区域应用标准路栏等进行分隔，并有明显警告标示，夜间施工人员应佩戴（    ），施工地点应加挂警示灯。",o:["照明灯","护目眼镜","反光标志","标志牌"],a:"C"},
+{id:32,t:"single",q:"依据配电安规，为防止损伤运行电缆或其他地下管线设施，在城市道路红线范围内不宜使用（    ）开沟挖（槽），硬路面面层破碎可使用小型机械设备，但应加强监护，不应深入土层。",o:["铲车","挖掘机","轻型机械","大型机械"],a:"D"},
+{id:33,t:"single",q:"依据配电安规，沟（槽）开挖深度达到（    ）m及以上时，应采取措施防止土层塌方。",o:["1","1.5","1.8","2"],a:"B"},
+{id:34,t:"single",q:"依据配电安规，沟（槽）开挖时，应将路面铺设材料和泥土（    ），堆置处和沟（槽）之间应保留通道供施工人员正常行走。",o:["分别堆置","一起堆置","单独堆置","依次堆置"],a:"A"},
+{id:35,t:"single",q:"依据配电安规，绞磨应放置平稳，锚固应可靠，受力（    ）不应有人，锚固绳应有防滑动措施，并可靠接地。",o:["右侧","左侧","前方","后方"],a:"C"},
+{id:36,t:"single",q:"依据配电安规，链条（手扳）葫芦使用前应检查吊钩、链条、转动装置及制动装置，吊钩、链轮或倒卡变形以及链条磨损达直径的（    ）时，不应使用。",o:["0.07","0.1","0.15","0.2"],a:"B"},
+{id:37,t:"single",q:"依据配电安规，链条（手扳）葫芦的制动装置不应沾染（    ）。",o:["水分","油脂","灰尘","酒精"],a:"B"},
+{id:38,t:"single",q:"依据配电安规，两台及两台以上链条葫芦起吊同一重物时，重物的重量应小于（    ）。",o:["所有链条葫芦的允许起重量相加","各链条葫芦的平均允许起重量","每台链条葫芦的允许起重量","对角线上的链条葫芦的平均起重量"],a:"C"},
+{id:39,t:"single",q:"依据配电安规，钢丝绳插接的环绳或绳套，其插接长度应大于钢丝绳直径的15倍，且不应小于（    ）mm。",o:["200","300","400","500"],a:"B"},
+{id:40,t:"single",q:"依据配电安规，合成纤维吊装带用于不同承重方式时，应严格按照（    ）使用。",o:["人员的经验","标签给予的定值","吊装带尺寸","吊装带长度"],a:"B"},
+{id:41,t:"single",q:"依据配电安规，施工机具应定期维护、保养。施工机具的（    ）部分应保持润滑。",o:["转动和传动","转动和机电","传动和机电","链接和电气"],a:"A"},
+{id:42,t:"single",q:"依据配电安规，电动工具应做到（    ）。",o:["一机一闸","一机两闸一保护","一机一闸一线路","一机一闸一保护"],a:"D"},
+{id:43,t:"single",q:"依据配电安规，使用金属外壳的电动工具，应（    ）。",o:["不用戴手套","戴绝缘手套","穿便鞋","戴线手套"],a:"B"},
+{id:44,t:"single",q:"依据配电安规，火灾危险性很大，发生火灾时后果很严重的部位或场所是（    ）动火区。",o:["三级","二级","一级","重点"],a:"C"},
+{id:45,t:"single",q:"依据配电安规，柱上断路器应有（ ）的机械指示。",o:["通断位置","分、合位置","运行状态","故障状态"],a:"B"},
+{id:46,t:"single",q:"依据配电安规，配电设备的接地电阻应（    ）。",o:["合格","小于 5Ω","小于 10Ω","大于 1Ω"],a:"B"},
+{id:47,t:"single",q:"依据配电安规，封闭式高压配电设备进线电源侧和出线线路侧应装设（ ）。",o:["接地装置","带电显示装置","熔断器","隔离开关"],a:"B"},
+{id:48,t:"single",q:"依据配电安规，配电站、开关站的井、坑、孔、洞或沟（槽），应覆以与地面齐平而坚固的盖板，检修作业需将盖板取下时，应设（ ）。",o:["临时围栏","永久性围栏","遮栏","标示牌"],a:"A"},
+{id:49,t:"single",q:"依据配电安规，所有吊物孔、没有盖板的孔洞、楼梯和平台，应装设不低于（ ）高的栏杆和不低于 100mm高的护板。",o:["1000mm","1050mm","1100mm","1200mm"],a:"B"},
+{id:50,t:"single",q:"依据配电安规，作业前，应做好安全风险辨识，作业人员应被告知其作业现场和工作岗位存在的危险因素、防范措施及（ ）。",o:["应急处置方案","紧急处理措施","逃生路线","联络方式"],a:"B"},
+{id:51,t:"single",q:"依据配电安规，作业人员有权拒绝违章指挥和强令冒险作业，在发现直接危及人身、电网和设备安全的紧急情况时，有权（ ）。",o:["继续作业","呼叫工作负责人","停止作业或撤离","停止作业并报告"],a:"C"},
+{id:52,t:"single",q:"依据配电安规，工作票签发人或工作负责人认为有必要现场勘察的配电检修（施工）作业和用户工程、设备上的工作，应根据工作任务组织现场勘察，并填写（ ）。",o:["工作票","现场勘察记录","操作票","作业指导书"],a:"B"},
+{id:53,t:"single",q:"依据配电安规，现场勘察应由（ ）组织，工作负责人、设备运维管理单位和检修（施工）单位相关人员参加。",o:["工作票签发人或工作负责人","分包队伍","安全员","技术负责人"],a:"A"},
+{id:54,t:"single",q:"依据配电安规，需要将高压线路、设备停电或做安全措施者，应填用（ ）。",o:["配电第一种工作票","配电第二种工作票","配电带电作业工作票","低压工作票"],a:"A"},
+{id:55,t:"single",q:"依据配电安规，动火执行人、监护人同时离开作业现场，间断时间超过（    ）min，继续动火前，动火执行人、监护人应重新确认安全条件。",o:["15","30","45","60"],a:"B"},
+{id:56,t:"single",q:"依据配电安规，使用中的氧气瓶和乙炔气瓶应（    ）固定放置。",o:["水平","倾斜","并排","垂直"],a:"D"},
+{id:57,t:"single",q:"依据配电安规，使用中的氧气瓶和乙炔气瓶的距离不应小于（    ）m；气瓶的放置地点不应靠近热源，应距明火（    ）m以外。",o:["4，8","5，10","5，8","4，10"],a:"B"},
+{id:58,t:"single",q:"依据配电安规，重大物件的起重、搬运工作应由有经验的专人负责，作业前应进行（    ）。",o:["技术交底","安全交底","安全教育","培训考试"],a:"A"},
+{id:59,t:"single",q:"依据配电安规，起重设备、吊索具和其他起重工具的工作负荷，不应超过（    ）。",o:["额定标准","铭牌规定","规程要求","公司标准"],a:"B"},
+{id:60,t:"single",q:"依据配电安规，当风力达到（    ）级以上时，受风面积较大的物体不宜起吊。",o:["4","5","3","2"],a:"B"},
+{id:61,t:"multi",q:"依据配电安规，挖坑时，应及时清除坑口附近浮土、石块，路面铺设材料和泥土应分别堆置，在堆置物堆起的斜坡上不应放置（    ）等器物。",o:["工具","桩锚","杆塔","材料"],a:"AD"},
+{id:62,t:"multi",q:"依据配电安规，登杆塔前，应检查（    ）是否牢固。",o:["金具","杆根","基础","拉线"],a:"BCD"},
+{id:63,t:"multi",q:"依据配电安规，遇有（    ）或导地线、拉线松动的杆塔，登杆塔前，应先培土加固、打好临时拉线或支好架杆。",o:["冲刷","起土","上拔","下沉"],a:"ABC"},
+{id:64,t:"multi",q:"依据配电安规，杆塔作业应禁止以下行为（    ）。",o:["攀登杆基未完全牢固或未做好临时拉线的新立杆塔","手持工器具、材料等上下杆或在杆塔上移位","利用绳索、拉线上下杆塔","顺杆下滑"],a:"ABCD"},
+{id:65,t:"multi",q:"依据配电安规，作业人员（    ）时，手扶的构件应牢固，不应失去安全保护，并有防止安全带从杆顶脱出或被锋利物损坏的措施。",o:["攀登杆塔","杆塔上移位","杆塔上休息","杆塔上作业"],a:"ABD"},
+{id:66,t:"multi",q:"依据配电安规，调整杆塔倾斜、弯曲、拉线受力不均时，应根据需要设置（    ），并应有专人统一指挥。",o:["专责监护人","警示标志","临时拉线","临时拉线的调节范围"],a:"CD"},
+{id:67,t:"multi",q:"依据配电安规，立杆及修整杆坑，应采用拉绳、叉杆等控制杆身（    ）。",o:["翻动","倾斜","滚动","断裂"],a:"BC"},
+{id:68,t:"multi",q:"依据配电安规，使用临时拉线时应注意以下事项（    ）。",o:["不应利用树木或外露岩石作受力桩","一个锚桩上的临时拉线不应超过3根","临时拉线不应固定在有可能移动或其他不可靠的物体上","临时拉线绑扎工作应由有经验的人员担任"],a:"ACD"},
+{id:69,t:"multi",q:"依据配电安规，在带电线路、设备附近立、撤杆塔，应有防止立、撤杆过程中（    ）接近带电导线的措施。",o:["拉线跳动","杆塔倾斜","起重设备","起重绳索"],a:"AB"},
+{id:70,t:"multi",q:"依据配电安规，放线、紧线与撤线工作均应有（    ），并做到通信畅通、加强监护。",o:["统一调度","明确分工","专人指挥","统一信号"],a:"CD"},
+{id:71,t:"multi",q:"依据配电安规，放线、紧线前，应检查确认导线无障碍物挂住，导线与牵引绳的连接应可靠，线盘架应（    ）。",o:["无要求","稳固可靠","转动灵活","制动可靠"],a:"BCD"},
+{id:72,t:"multi",q:"依据配电安规，紧线、撤线前，应检查拉线、桩锚及杆塔。必要时，应（    ）。",o:["设专人监护","派专人看守","加固桩锚","增设临时拉线"],a:"CD"},
+{id:73,t:"multi",q:"依据配电安规，与带电线路平行、邻近或交叉跨越的线路停电检修，工作负责人宣布开始工作前，应（    ）。",o:["核对停电检修线路的名称、杆号无误","验明线路确已停电","装设接地线","装设安全遮拦（围栏）"],a:"ABC"},
+{id:74,t:"multi",q:"依据配电安规，绞磨作业前应检查和试车，确认（    ）。",o:["外观整洁","安置稳固","运行正常","制动可靠"],a:"BCD"},
+{id:75,t:"multi",q:"依据配电安规，绞磨作业时（    ）。",o:["不应向滑轮上套钢丝绳","不应在卷筒、滑轮附近用手触碰运行中的钢丝绳","不应跨越行走中的钢丝绳","不应在导向滑轮的内侧逗留或通过"],a:"ABCD"},
+{id:76,t:"multi",q:"依据配电安规，独立抱杆至少应有（    ）根缆风绳，人字抱杆至少应有（    ）根缆风绳并有限制腿部开度的控制绳。",o:["六","四","三","二"],a:"BD"},
+{id:77,t:"multi",q:"依据配电安规，卡线器的规格、材质应与线材的规格、材质相匹配。不应使用有（    ）等缺陷的卡线器。",o:["弯曲","转轴不灵活","裂纹","钳口斜纹磨平"],a:"ABCD"},
+{id:78,t:"multi",q:"依据配电安规，有（    ）时，不应进行起重作业。",o:["大雾","照明不足","指挥人员看不清各工作地点","起重机操作人员未获得有效指挥"],a:"ABCD"},
+{id:79,t:"multi",q:"依据配电安规，安全帽使用的安全要求包括（ ）。",o:["组件完好","锁紧下颚带","超过使用期限报废","定期检查"],a:"ABCD"},
+{id:80,t:"multi",q:"依据配电安规，绝缘斗臂车作业的安全要求包括（ ）。",o:["空斗试操作","车身可靠接地","发动机不熄火","保持安全距离"],a:"ABCD"},
+{id:81,t:"multi",q:"依据配电安规，柱上变压器台架工作的安全要求包括（ ）。",o:["检查台架联结牢固","高低压侧验电接地","保持安全距离","低压侧可不接地"],a:"ABC"},
+{id:82,t:"multi",q:"依据配电安规，同杆（塔）架设多回线路停电工作的安全措施包括（  ）。",o:["填写线路双重称号","核对停电线路名称","设专人监护登杆","防止误登带电线路"],a:"ABCD"},
+{id:83,t:"multi",q:"依据配电安规，放线、紧线与撤线的安全要求包括（ ）。",o:["专人指挥统一信号","交叉跨越设安全措施","不跨越受力导线内角侧","不突然剪断导线"],a:"ABCD"},
+{id:84,t:"multi",q:"依据配电安规，在使用电动工具的工作中，（    ），应立即切断电源。",o:["因故离开工作场所","暂时停止工作","遇到临时停电时","换人工作时"],a:"ABC"},
+{id:85,t:"multi",q:"依据配电安规，挖坑作业的安全要求包括（ ）。",o:["明确地下设施位置","深基坑防塌方","有毒气体检测","居民区设遮栏"],a:"ABCD"},
+{id:86,t:"multi",q:"依据配电安规，杆塔上作业禁止的行为包括（ ）。",o:["登未牢固的杆塔","手持工具上下杆","顺杆下滑","使用安全带"],a:"ABC"},
+{id:87,t:"multi",q:"依据配电安规，立杆和撤杆的安全要求包括（ ）。",o:["专人统一指挥","居民区设警戒","基坑内无人","合格抱杆"],a:"ABCD"},
+{id:88,t:"multi",q:"依据配电安规，电动工具的电线不应（    ），使用时应避免载重车辆和重物压在电线上。",o:["接触热体","暴晒","多圈","放在湿地上"],a:"AD"},
+{id:89,t:"multi",q:"依据配电安规，使用电动工具，不应手提（    ）。",o:["导线","把手","转动部分","器身"],a:"AC"},
+{id:90,t:"multi",q:"依据配电安规，电动工具的电气部分维修后，应进行（    ）。",o:["外观检查","绝缘电阻测量","绝缘耐压试验","直流电阻测量"],a:"BC"},
+{id:91,t:"multi",q:"依据配电安规，电动工具使用前，应（    ）。",o:["检查确认电线、接地完好","检查确认电线、接零完好","检查确认工具的金属外壳","检查外观光滑"],a:"ABC"},
+{id:92,t:"multi",q:"依据配电安规，连接电动机械及电动工具的电气回路应（    ）。",o:["单独设开关或插座","装设剩余电流动作保护装置","金属外壳应接地","设置双开关或双刀闸"],a:"ABC"},
+{id:93,t:"multi",q:"依据配电安规，施工机具应有专用库房存放，库房要（    ）。",o:["经常通风","保持干燥","干净整齐","湿润整洁"],a:"AB"},
+{id:94,t:"multi",q:"依据配电安规，使用的滑车应有防止脱钩的（    ）。使用开门滑车时，应将开门勾环扣紧，防止绳索自动跑出。",o:["保险装置","封口措施","专人监护","专人指挥"],a:"AB"},
+{id:95,t:"multi",q:"依据配电安规，纤维绳（麻绳）有（    ）者不应用于起重作业。",o:["霉烂","拧股","腐蚀","损伤"],a:"ACD"},
+{id:96,t:"multi",q:"依据配电安规，不应使用出现（    ）的纤维绳。",o:["严重磨损","松股","散股","断股"],a:"ABCD"},
+{id:97,t:"multi",q:"依据配电安规，钢丝绳端部用绳卡固定连接时，绳卡压板应在钢丝绳主要受力的一边，不准正反交叉设置；绳卡间距不应小于钢丝绳直径的（    ）倍；绳卡数量不应少于（    ）个。",o:["6","4","3","2"],a:"AC"},
+{id:98,t:"multi",q:"依据配电安规，钢丝绳的（    ）和报废应遵循GB/T 5972的要求。",o:["保养","维护","清洗","检验"],a:"ABD"},
+{id:99,t:"multi",q:"依据配电安规，以下属于起重作业禁止条件的有（    ）。",o:["大雾天气","照明不足","指挥人员看不清各工作地点","起重机操作人员未获得有效指挥"],a:"ABCD"},
+{id:100,t:"multi",q:"依据配电安规，起重作业人员应（    ）。",o:["经专业技术培训","经实际操作及有关安全规程考试合格、取得合格证","熟悉起重设备","熟悉作业指导书"],a:"ABCD"},
+{id:101,t:"judge",q:"依据配电安规，在杆塔上作业时，应使用安全带。使用有后备保护绳或速差自锁器的安全带时，安全带和保护绳应分挂在杆塔不同部位的牢固构件上。",o:["正确","错误"],a:"A"},
+{id:102,t:"judge",q:"依据配电安规，上横担前，应检查横担腐蚀情况、联结是否牢固，检查时安全带（绳）应系在移动或不牢固的构件上。",o:["正确","错误"],a:"B"},
+{id:103,t:"judge",q:"依据配电安规，在杆塔上使用梯子或临时工作平台，应将两端与固定物可靠连接，一般应由一人在其上作业。",o:["正确","错误"],a:"A"},
+{id:104,t:"judge",q:"依据配电安规，检修杆塔不应随意拆除受力构件，如需要拆除时，应事先做好补强措施。",o:["正确","错误"],a:"A"},
+{id:105,t:"judge",q:"依据配电安规，杆塔上有人时，可以调整但不应拆除拉线。",o:["正确","错误"],a:"B"},
+{id:106,t:"judge",q:"依据配电安规，雷电时，不应在线路杆塔上作业。",o:["正确","错误"],a:"A"},
+{id:107,t:"judge",q:"依据配电安规，居民区和交通道路附近立、撤杆，应设警戒范围或警告标志，并派人看守。",o:["正确","错误"],a:"A"},
+{id:108,t:"judge",q:"依据配电安规，杆塔施工过程需要采用临时拉线过夜时，应对临时拉线采取加固和防盗措施。",o:["正确","错误"],a:"A"},
+{id:109,t:"judge",q:"依据配电安规，临时拉线拆除前，永久拉线应全部安装完毕并承力。",o:["正确","错误"],a:"A"},
+{id:110,t:"judge",q:"依据配电安规，使用吊车立、撤杆塔，钢丝绳套应挂在电杆的中间位置以防止电杆突然倾倒，吊钩应封闭。",o:["正确","错误"],a:"B"},
+{id:111,t:"judge",q:"依据配电安规，在10kV带电线路、设备附近立、撤杆塔，杆塔、拉线、临时拉线应与带电线路、设备保持0.7m的安全距离。",o:["正确","错误"],a:"B"},
+{id:112,t:"judge",q:"依据配电安规，已经立起的杆塔，可撤去拉绳及叉杆。",o:["正确","错误"],a:"B"},
+{id:113,t:"judge",q:"依据配电安规，放线、紧线与撤线工作前应检查确认放线、紧线与撤线工具及设备符合要求。",o:["正确","错误"],a:"A"},
+{id:114,t:"judge",q:"依据配电安规，放线、紧线时，遇接线头过滑轮、横担、树枝、房屋等处有卡、挂现象，可以用手直接拉、推导线。",o:["正确","错误"],a:"B"},
+{id:115,t:"judge",q:"依据配电安规，放线、紧线与撤线时，作业人员不应站在或跨在已受力的牵引绳、导线的外角侧，展放的导线圈内以及牵引绳或架空线的垂直下方。",o:["正确","错误"],a:"B"},
+{id:116,t:"judge",q:"依据配电安规，放、撤导线应有人监护，注意与高压导线的安全距离，并采取措施防止与低压带电线路接触。",o:["正确","错误"],a:"A"},
+{id:117,t:"judge",q:"依据配电安规，在交通道口采取无跨越架施工时，应采取措施防止车辆挂碰施工线路。",o:["正确","错误"],a:"A"},
+{id:118,t:"judge",q:"依据配电安规，架空绝缘导线可视为绝缘设备，作业人员在做好相应的安全措施后可直接接触或接近。",o:["正确","错误"],a:"B"},
+{id:119,t:"judge",q:"依据配电安规，在停电检修作业中，开断或接入绝缘导线前，应做好防感应电的安全措施。",o:["正确","错误"],a:"A"},
+{id:120,t:"judge",q:"依据配电安规，与带电线路平行、邻近或交叉跨越的线路停电检修，作业人员登杆前应核对停电检修线路的名称、杆号无误，方可攀登。",o:["正确","错误"],a:"B"},
+{id:121,t:"judge",q:"依据配电安规，线路双重称号指线路名称和编号。",o:["正确","错误"],a:"B"},
+{id:122,t:"judge",q:"依据配电安规，同杆（塔）架设多回线路中部分线路停电的工作，工作负责人在接受许可开始工作的命令前，应与工作许可人核对停电线路双重名称无误。",o:["正确","错误"],a:"B"},
+{id:123,t:"judge",q:"依据配电安规，在有同杆（塔）架设的10（20）kV及以下线路带电情况下，应做好安全措施后再进行另一回高压线路的放线、紧线、撤线作业。",o:["正确","错误"],a:"B"},
+{id:124,t:"judge",q:"依据配电安规，选用抱杆应进行应力校核。",o:["正确","错误"],a:"B"},
+{id:125,t:"judge",q:"依据配电安规，抱杆基础应平整坚实、不积水。在土质坚硬的地方，抱杆脚应用垫木垫牢。",o:["正确","错误"],a:"B"},
+{id:126,t:"judge",q:"依据配电安规，放线架应支撑在坚实的地面上，松软地面应采取加固措施。放线轴与导线伸展方向应平行。",o:["正确","错误"],a:"B"},
+{id:127,t:"judge",q:"依据配电安规，地锚的分布和埋设深度，应严格按照统一标准执行。",o:["正确","错误"],a:"B"},
+{id:128,t:"judge",q:"依据配电安规，不应使用弯曲和变形严重的钢质地锚。",o:["正确","错误"],a:"A"},
+{id:129,t:"judge",q:"依据配电安规，起重链不应打扭，亦不应拆成单股使用。",o:["正确","错误"],a:"A"},
+{id:130,t:"judge",q:"依据配电安规，链条（手扳）葫芦使用中发生卡链情况，检修前应将重物垫好。",o:["正确","错误"],a:"A"},
+{id:131,t:"judge",q:"依据配电安规，新插接的钢丝绳套应做125%允许负荷的抽样试验。",o:["正确","错误"],a:"A"},
+{id:132,t:"judge",q:"依据配电安规，通过滑轮及卷筒的钢丝绳不应有接头。",o:["正确","错误"],a:"A"},
+{id:133,t:"judge",q:"依据配电安规，合成纤维吊装带使用时不应与尖锐棱角接触。",o:["正确","错误"],a:"B"},
+{id:134,t:"judge",q:"依据配电安规，不应使用外部护套破损显露出内芯的合成吊装带。",o:["正确","错误"],a:"A"},
+{id:135,t:"judge",q:"依据配电安规，不应使用出现松股、散股、断股、严重磨损的纤维绳。",o:["正确","错误"],a:"A"},
+{id:136,t:"judge",q:"依据配电安规，机械驱动时应使用纤维绳。",o:["正确","错误"],a:"B"},
+{id:137,t:"judge",q:"依据配电安规，切断绳索时，应先将预定切断的两边用软钢丝扎结，以免切断后绳索松散，断头应绑扎处理。",o:["正确","错误"],a:"B"},
+{id:138,t:"judge",q:"依据配电安规，滑车及滑车组使用前应检查，不应使用有裂纹、轮沿破损等情况的滑轮。",o:["正确","错误"],a:"A"},
+{id:139,t:"judge",q:"依据配电安规，滑车不应拴挂在不牢固的结构物上。",o:["正确","错误"],a:"A"},
+{id:140,t:"judge",q:"依据配电安规，拴挂固定滑车的桩或锚应埋设牢固可靠。",o:["正确","错误"],a:"A"},
+{id:141,t:"judge",q:"依据配电安规，使用棘轮紧线器各连接部位出现松动或钢丝绳有断丝、锈蚀、退火等情况时不应使用。",o:["正确","错误"],a:"A"},
+{id:142,t:"judge",q:"依据配电安规，电动工具使用前，应检查确认电线、接地或接零完好；检查确认工具的金属外壳可靠接地。",o:["正确","错误"],a:"A"},
+{id:143,t:"judge",q:"依据配电安规，起重搬运时只能由一人统一指挥，不应设置中间指挥人员传递信号。",o:["正确","错误"],a:"B"},
+{id:144,t:"judge",q:"依据配电安规，起重指挥信号应简明、统一、畅通，分工明确。",o:["正确","错误"],a:"A"},
+{id:145,t:"judge",q:"依据配电安规，遇有5级以上的大风时，不应露天进行起重工作。",o:["正确","错误"],a:"B"},
+{id:146,t:"judge",q:"依据配电安规，雷雨时，应停止室内起重作业。",o:["正确","错误"],a:"B"},
+{id:147,t:"judge",q:"依据配电安规，起重工作在道路上施工应装设遮栏（围栏），并悬挂警告标示牌。",o:["正确","错误"],a:"A"},
+{id:148,t:"judge",q:"依据配电安规，起吊电杆等长物件应选择合理的吊点，并采取防止突然倾倒的措施。",o:["正确","错误"],a:"A"},
+{id:149,t:"judge",q:"依据配电安规，汽车式起重机行驶时，上车操作室不应坐人。",o:["正确","错误"],a:"A"},
+{id:150,t:"judge",q:"依据配电安规，起重设备长期或频繁地靠近架空线路或其他带电体作业时，应设置专人监护。",o:["正确","错误"],a:"B"}
+];
+
+// 全局变量
+let idx = 0;
+let list = [];
+let ans = {};
+let wrong = JSON.parse(localStorage.getItem("d5_wrong") || "[]");
+let done = false;
+let mode = "order";
+
+// 初始化
+window.onload = function(){ updateBadge(); };
+
+// 更新错题数量角标
+function updateBadge(){
+  const b = document.getElementById("wrongCountBadge");
+  b.textContent = wrong.length > 0 ? "("+wrong.length+"道)" : "";
+}
+
+// 切换页面
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const showBottom = (id === 'quizPage');
+  document.getElementById('bottomBar').style.display = showBottom ? 'flex' : 'none';
+  document.getElementById('progressBar').style.display = showBottom ? 'block' : 'none';
+  document.getElementById('backBtn').style.display = (id !== 'homePage') ? 'block' : 'none';
+}
+
+// 返回
+function goBack(){
+  if(document.getElementById('quizPage').classList.contains('active')) backToHome();
+  else if(document.getElementById('cardPage').classList.contains('active')) showPage('quizPage');
+  else backToHome();
+}
+
+function backToHome(){
+  showPage('homePage');
+  document.getElementById('headerTitle').textContent = 'D5配电施工安规题库';
+  document.getElementById('headerStats').textContent = '';
+  updateBadge();
+}
+
+// 开始顺序刷题
+function startPractice(){
+  mode = "order";
+  list = [...Q];
+  idx = 0;
+  ans = {};
+  done = false;
+  showPage('quizPage');
+  document.getElementById('headerTitle').textContent = '顺序刷题';
+  render();
+}
+
+// 开始随机刷题
+function startRandom(){
+  mode = "random";
+  list = [...Q].sort(()=>Math.random()-0.5);
+  idx = 0;
+  ans = {};
+  done = false;
+  showPage('quizPage');
+  document.getElementById('headerTitle').textContent = '随机刷题';
+  render();
+}
+
+// 渲染题目
+function render(){
+  const q = list[idx];
+  const typeMap = {single:'单选题',multi:'多选题',judge:'判断题'};
+  const typeClass = {single:'type-single',multi:'type-multi',judge:'type-judge'};
+  
+  document.getElementById('questionType').textContent = typeMap[q.t];
+  document.getElementById('questionType').className = 'question-type ' + typeClass[q.t];
+  document.getElementById('questionNum').textContent = (idx+1)+'/'+list.length;
+  document.getElementById('questionText').textContent = q.q;
+  
+  const letters = ['A','B','C','D','E'];
+  let html = '';
+  q.o.forEach((opt,i)=>{
+    html += `<div class="option" data-l="${letters[i]}" onclick="pick('${letters[i]}')">
+      <div class="option-letter">${letters[i]}</div>
+      <div class="option-text">${opt}</div>
+    </div>`;
+  });
+  document.getElementById('optionsContainer').innerHTML = html;
+  document.getElementById('answerResult').className = 'answer-result';
+  document.getElementById('answerResult').innerHTML = '';
+  
+  // 进度条
+  document.getElementById('progressFill').style.width = ((idx+1)/list.length*100)+'%';
+  
+  // 顶部统计
+  const cnt = Object.keys(ans).length;
+  const right = Object.values(ans).filter(a=>a.ok).length;
+  document.getElementById('headerStats').textContent = '已答'+cnt+' 对'+right;
+  
+  // 按钮
+  document.getElementById('nextBtn').disabled = true;
+  document.getElementById('nextBtn').textContent = idx === list.length-1 ? '交卷' : '下一题';
+  
+  done = false;
+  
+  // 已答过则恢复
+  if(ans[q.id]) restore(q);
+}
+
+// 恢复已答状态
+function restore(q){
+  done = true;
+  const a = ans[q.id];
+  document.querySelectorAll('.option').forEach(opt=>{
+    opt.classList.add('disabled');
+    const l = opt.dataset.l;
+    if(q.a.includes(l)) opt.classList.add('correct');
+    if(a.sel.includes(l) && !q.a.includes(l)) opt.classList.add('wrong');
+  });
+  const r = document.getElementById('answerResult');
+  r.classList.add('show');
+  if(a.ok){ r.classList.add('correct'); r.innerHTML = '<strong>✓ 回答正确</strong>'; }
+  else{ r.classList.add('wrong'); r.innerHTML = '<strong>✗ 回答错误</strong>正确答案：'+q.a; }
+  document.getElementById('nextBtn').disabled = false;
+}
+
+// 选择选项
+function pick(l){
+  if(done) return;
+  const q = list[idx];
+  
+  if(q.t === 'multi'){
+    const el = document.querySelector(`.option[data-l="${l}"]`);
+    el.classList.toggle('selected-multi');
+    const sel = document.querySelectorAll('.option.selected-multi').length;
+    if(sel > 0){
+      document.getElementById('nextBtn').disabled = false;
+      document.getElementById('nextBtn').textContent = '确认答案';
+    } else {
+      document.getElementById('nextBtn').disabled = true;
+      document.getElementById('nextBtn').textContent = idx===list.length-1?'交卷':'下一题';
+    }
+    return;
+  }
+  
+  // 单选判断直接判分
+  submit([l]);
+}
+
+// 提交答案
+function submit(selected){
+  done = true;
+  const q = list[idx];
+  const selStr = selected.sort().join('');
+  const ok = selStr === q.a;
+  
+  document.querySelectorAll('.option').forEach(opt=>{
+    opt.classList.add('disabled');
+    const l = opt.dataset.l;
+    if(q.a.includes(l)) opt.classList.add('correct');
+    if(selected.includes(l) && !q.a.includes(l)) opt.classList.add('wrong');
+  });
+  
+  ans[q.id] = {sel:selStr, ok:ok};
+  
+  // 错题本
+  if(ok){
+    wrong = wrong.filter(id=>id !== q.id);
+  } else {
+    if(!wrong.includes(q.id)) wrong.push(q.id);
+  }
+  localStorage.setItem("d5_wrong", JSON.stringify(wrong));
+  
+  const r = document.getElementById('answerResult');
+  r.classList.add('show');
+  if(ok){ r.classList.add('correct'); r.innerHTML = '<strong>✓ 回答正确</strong>'; }
+  else{ r.classList.add('wrong'); r.innerHTML = '<strong>✗ 回答错误</strong>正确答案：'+q.a; }
+  
+  const cnt = Object.keys(ans).length;
+  const right = Object.values(ans).filter(a=>a.ok).length;
+  document.getElementById('headerStats').textContent = '已答'+cnt+' 对'+right;
+  
+  document.getElementById('nextBtn').disabled = false;
+  document.getElementById('nextBtn').textContent = idx===list.length-1?'交卷':'下一题';
+}
+
+// 下一题
+function nextQuestion(){
+  const q = list[idx];
+  
+  // 多选题未确认
+  if(q.t === 'multi' && !done){
+    const sel = [];
+    document.querySelectorAll('.option.selected-multi').forEach(el=>sel.push(el.dataset.l));
+    if(sel.length === 0){ alert('请至少选择一个选项'); return; }
+    submit(sel);
+    return;
+  }
+  
+  if(idx < list.length - 1){
+    idx++;
+    render();
+  } else {
+    showResult();
+  }
+}
+
+// 结果页
+function showResult(){
+  const total = list.length;
+  const right = Object.values(ans).filter(a=>a.ok).length;
+  const w = total - right;
+  const rate = total>0 ? Math.round(right/total*100) : 0;
+  const score = Math.round(right/total*100);
+  
+  document.getElementById('finalScore').textContent = score + '分';
+  document.getElementById('resultTotal').textContent = total;
+  document.getElementById('resultCorrect').textContent = right;
+  document.getElementById('resultWrong').textContent = w;
+  document.getElementById('resultRate').textContent = rate + '%';
+  
+  showPage('resultPage');
+  document.getElementById('headerTitle').textContent = '练习结果';
+  document.getElementById('bottomBar').style.display = 'none';
+}
+
+// 答题卡
+function showAnswerCard(){
+  if(list.length === 0){ alert('请先开始答题'); return; }
+  const grid = document.getElementById('answerCardGrid');
+  let html = '';
+  list.forEach((q,i)=>{
+    let cls = 'card-item';
+    if(ans[q.id]) cls += ans[q.id].ok ? ' correct' : ' wrong';
+    if(i === idx && document.getElementById('quizPage').classList.contains('active')) cls += ' current';
+    html += `<div class="${cls}" onclick="jump(${i})">${i+1}</div>`;
+  });
+  grid.innerHTML = html;
+  
+  const cnt = Object.keys(ans).length;
+  const right = Object.values(ans).filter(a=>a.ok).length;
+  document.getElementById('cardAnswered').textContent = cnt;
+  document.getElementById('cardCorrect').textContent = right;
+  document.getElementById('cardWrong').textContent = cnt - right;
+  
+  showPage('cardPage');
+  document.getElementById('headerTitle').textContent = '答题卡';
+}
+
+function jump(i){ idx = i; showPage('quizPage'); render(); }
+function continueQuiz(){ showPage('quizPage'); }
+
+// 错题本
+function showWrongBook(){
+  renderWrongList('all');
+  showPage('wrongPage');
+  document.getElementById('headerTitle').textContent = '错题本';
+}
+
+function filterWrong(type){
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
+  renderWrongList(type);
+}
+
+function renderWrongList(type){
+  const box = document.getElementById('wrongList');
+  let data = Q.filter(q=>wrong.includes(q.id));
+  if(type !== 'all') data = data.filter(q=>q.t === type);
+  
+  if(data.length === 0){
+    box.innerHTML = '<div class="empty-state"><div class="empty-icon">🎉</div><div>暂无错题，继续加油！</div></div>';
+    return;
+  }
+  
+  const typeMap = {single:'单选',multi:'多选',judge:'判断'};
+  let html = '';
+  data.forEach(q=>{
+    html += `<div class="wrong-item" onclick="reviewWrong(${q.id})">
+      <div class="wrong-question">${q.id}. ${q.q}</div>
+      <div class="wrong-meta">${typeMap[q.t]} · 正确答案：${q.a}</div>
+    </div>`;
+  });
+  box.innerHTML = html;
+}
+
+// 从错题本进入单题复习
+function reviewWrong(id){
+  list = Q.filter(q=>wrong.includes(q.id));
+  idx = list.findIndex(q=>q.id === id);
+  ans = {};
+  done = false;
+  mode = "wrong";
+  showPage('quizPage');
+  document.getElementById('headerTitle').textContent = '错题复习';
+  render();
+}
+</script>
+</body>
+</html>
